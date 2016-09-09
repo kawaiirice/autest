@@ -1,0 +1,16 @@
+import json, subprocess
+import pprint
+
+if Arguments.ats_bin is not None:
+    # Add environment variables
+    ENV['ATS_BIN'] = Arguments.ats_bin
+    if Arguments.ats_bin not in ENV['PATH']:
+        ENV['PATH'] = Arguments.ats_bin + ':' + ENV['PATH']
+    
+if ENV['ATS_BIN'] is not None:
+    # Add variables for Tests
+    traffic_layout = os.path.join(ENV['ATS_BIN'], "traffic_layout")
+    out = subprocess.check_output([traffic_layout, "--json"])
+    out = json.loads(out)
+    Variables.update(out)
+    host.WriteVerbose(['ats'],"Traffic server layout Data:\n",pprint.pformat(out))
