@@ -1,0 +1,8 @@
+# Handle line endings automatically for files detected as text using Git heuristics
+* text=auto
+
+# Configure line endings by file type
+*.py text
+*.txt text
+*.test text
+*.gold text
