@@ -35,6 +35,8 @@ def MakeATSProcess(obj, name, select_ports=True):
     config_dir = os.path.join(ts_dir,obj.Variables.SYSCONFDIR.replace(obj.Variables.PREFIX+"/",""))
     # directory contains the html response templates
     template_dir=os.path.join(config_dir, "body_factory")
+    # contains plugins
+    plugin_dir = os.path.join(ts_dir,obj.Variables.PLUGINDIR.replace(obj.Variables.PREFIX+"/",""))
     # the log directory
     log_dir=os.path.join(ts_dir, 'log')
     
@@ -72,6 +74,12 @@ def MakeATSProcess(obj, name, select_ports=True):
     p.Env['PROXY_CONFIG_BODY_FACTORY_TEMPLATE_SETS_DIR']=template_dir
     p.Variables.body_factory_template_dir=template_dir
     p.Setup.Copy(os.path.join(p.Variables.SYSCONFDIR,'body_factory'), template_dir)
+	
+	#########################################################
+    # setup read-only data directory for plugins
+    
+    p.Env['PROXY_CONFIG_PLUGIN_PLUGIN_DIR']=plugin_dir
+    p.Setup.Copy(p.Variables.PLUGINDIR, plugin_dir)
 
     ######################################################### 
     # create subdirectories that need to exist (but are empty)
@@ -221,7 +229,7 @@ class Config(File):
         
     def AddLines(self, lines):
         for line in lines:
-            self.add_line(line)
+            self.AddLine(line)
 
     def _do_write(self,name):
         '''

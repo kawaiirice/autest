@@ -4,6 +4,8 @@ Test.Summary = '''
 Tests for custom reponse body
 '''
 
+# this test currently fails and it should not
+
 Test.SkipUnless(Condition.HasProgram("curl","Curl need to be installed on sytem for this test to work"))
 
 ts=Test.MakeATSProcess("ts")
