@@ -4,7 +4,7 @@ Test that Trafficserver starts with default configurations.
 
 Test.SkipUnless(Condition.HasProgram("curl","Curl need to be installed on sytem for this test to work"))
 
-p=Test.MakeATSProcess("ts", command="traffic_cop", select_ports=False)
+p=Test.MakeATSProcess("ts", command="traffic_cop --debug --stdout", select_ports=False)
 t = Test.AddTestRun("Test traffic server started properly")
 t.StillRunningAfter = Test.Processes.ts
 
