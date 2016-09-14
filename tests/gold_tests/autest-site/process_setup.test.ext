@@ -21,7 +21,7 @@ def make_id(s):
     return s.replace(".","_").replace('-','_')
     
 # this forms is for the global process define
-def MakeATSProcess(obj, name, select_ports=True):
+def MakeATSProcess(obj, name, command='traffic_server', select_ports=True):
     #####################################
     # common locations
     
@@ -42,7 +42,7 @@ def MakeATSProcess(obj, name, select_ports=True):
     
     
     # create process
-    p = obj.Processes.Process(name, "traffic_server")
+    p = obj.Processes.Process(name, command)
     
     # we want to have a few directories more fixed
     # this helps with debugging as location are common
