@@ -92,6 +92,8 @@ def MakeATSProcess(obj, name, command='traffic_server', select_ports=True):
 
     # this is needed for cache
     p.Setup.MakeDir(os.path.join(ts_dir, 'var/trafficserver'))
+    # will need this for traffic_manager is it runs
+    p.Setup.MakeDir(os.path.join(config_dir, 'snapshots'))
         
     ##########################################################
     # define the basic file for a given test run 
@@ -139,7 +141,12 @@ def MakeATSProcess(obj, name, command='traffic_server', select_ports=True):
     
     fname="log_hosts.config"
     tmpname=os.path.join(config_dir,fname)
-    p.Disk.File(tmpname,id=make_id(fname),typename="ats:config")
+    p.Disk.File(tmpname,id=make_id(fname),typename="ats:config").AddLine("# need something in here")
+
+    # magic file that should probally not exist
+    fname="logging.config"
+    tmpname=os.path.join(config_dir,fname)
+    p.Disk.File(tmpname,id=make_id(fname),typename="ats:config").AddLine("# need something in here")
     
     fname="metrics.config"
     tmpname=os.path.join(config_dir,fname)
