@@ -15,6 +15,7 @@ class CopyATSConfig(SetupItem):
 		self.targetname=targetname
 				
 	def setup(self):
+		
 		process = self.process if self.process else self
 		try:
 			ts_dir=process.Env['TS_ROOT']
@@ -24,7 +25,7 @@ class CopyATSConfig(SetupItem):
 			else:
 				raise SetupError('TS_ROOT is not defined. Cannot copy ats config file without location to copy to. Please pass in an ATS process object')
 		config_dir = os.path.join(ts_dir,process.ComposeVariables().SYSCONFDIR.replace(process.ComposeVariables().PREFIX+"/",""))
-		
+		host.WriteVerbose("CopyATSConfig", "Copying {0} to {1}".format(self.file, config_dir))
 		self.CopyAs(self.file,config_dir,self.targetname)
 
 AddSetupItem(CopyATSConfig, "CopyConfig", ns="ts")

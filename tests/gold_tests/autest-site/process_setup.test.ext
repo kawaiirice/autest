@@ -39,7 +39,7 @@ def MakeATSProcess(obj, name, command='traffic_server', select_ports=True):
     plugin_dir = os.path.join(ts_dir,obj.Variables.PLUGINDIR.replace(obj.Variables.PREFIX+"/",""))
     # the log directory
     log_dir=os.path.join(ts_dir, 'log')
-    
+    runtime_dir=os.path.join(ts_dir, 'var')
     
     # create process
     p = obj.Processes.Process(name, command)
@@ -88,10 +88,14 @@ def MakeATSProcess(obj, name, command='traffic_server', select_ports=True):
     p.Setup.Chown(log_dir, "nobody", "nobody",ignore=True) 
 
     # set env so traffic server uses correct locations
-    p.Env['PROXY_CONFIG_LOG_LOGFILE_DIR'] = 'log'
+    p.Env['PROXY_CONFIG_LOG_LOGFILE_DIR'] = log_dir
+    p.Variables.LOGDIR=log_dir
 
     # this is needed for cache
-    p.Setup.MakeDir(os.path.join(ts_dir, 'var/trafficserver'))
+    runtime_dir=os.path.join(ts_dir, 'var')
+    p.Env['PROXY_CONFIG_LOCAL_STATE_DIR']=runtime_dir
+    p.Variables.RUNTIMEDIR=runtime_dir
+    p.Setup.MakeDir(runtime_dir)
     # will need this for traffic_manager is it runs
     p.Setup.MakeDir(os.path.join(config_dir, 'snapshots'))
         
@@ -141,12 +145,12 @@ def MakeATSProcess(obj, name, command='traffic_server', select_ports=True):
     
     fname="log_hosts.config"
     tmpname=os.path.join(config_dir,fname)
-    p.Disk.File(tmpname,id=make_id(fname),typename="ats:config").AddLine("# need something in here")
+    #p.Disk.File(tmpname,id=make_id(fname),typename="ats:config").AddLine("# need something in here")
 
     # magic file that should probally not exist
-    fname="logging.config"
-    tmpname=os.path.join(config_dir,fname)
-    p.Disk.File(tmpname,id=make_id(fname),typename="ats:config").AddLine("# need something in here")
+    #fname="logging.config"
+    #tmpname=os.path.join(config_dir,fname)
+    #p.Disk.File(tmpname,id=make_id(fname),typename="ats:config").AddLine("# need something in here")
     
     fname="metrics.config"
     tmpname=os.path.join(config_dir,fname)
@@ -192,7 +196,10 @@ def MakeATSProcess(obj, name, command='traffic_server', select_ports=True):
     # set up default ports
     # get some ports  TODO make it so we can hold on to the socket
     if select_ports:
+        # some system have a bug in which ipv4 and ipv6 share port space
+        # Make two different ports to avoid this
         s1,p.Variables.port       = bind_unused_port()
+        s1v6,p.Variables.portv6       = bind_unused_port()
         p.Ready=When.PortOpen(p.Variables.port)
     s2,p.Variables.manager_port   = bind_unused_port()
     s3,p.Variables.admin_port     = bind_unused_port()
@@ -209,7 +216,7 @@ def MakeATSProcess(obj, name, command='traffic_server', select_ports=True):
     
     # set the ports
     if select_ports:
-        p.Env['PROXY_CONFIG_HTTP_SERVER_PORTS']= str(p.Variables.port)  # your own listen port
+        p.Env['PROXY_CONFIG_HTTP_SERVER_PORTS']= "{0} {1}:ipv6".format(p.Variables.port,p.Variables.portv6)  # your own listen port
     p.Env['PROXY_CONFIG_PROCESS_MANAGER_MGMT_PORT']= str(p.Variables.manager_port)  
     p.Env['PROXY_CONFIG_ADMIN_SYNTHETIC_PORT']= str(p.Variables.admin_port)
     #p.Env['PROXY_CONFIG_ADMIN_AUTOCONF_PORT']= str(p.Variables.admin_port)  # support pre ATS 6.x
@@ -280,7 +287,7 @@ class RecordsConfig(Config, dict):
         super(RecordsConfig, self).__init__(
             runable, name, exists = None, size = None, content_tester = None, execute=False, runtime=True
         )
-        self.WriteCustomOn(self._do_write)
+        #self.WriteCustomOn(self._do_write)
 
     def _do_write(self,name):
         if len(self) > 0:

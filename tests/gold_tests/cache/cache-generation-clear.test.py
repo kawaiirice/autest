@@ -16,7 +16,7 @@ ts.Disk.records_config.update({
             'proxy.config.http.wait_for_cache': 1, 
             'proxy.config.config_update_interval_ms':1,
         })
-ts.Disk.remap_config.AddLine('xdebug.so')
+ts.Disk.plugin_config.AddLine('xdebug.so')
 ts.Disk.remap_config.AddLines([
             'map /default/ http://127.0.0.1/ @plugin=generator.so',
             #line 2
@@ -34,14 +34,15 @@ objectid = uuid.uuid4()
 tr=Test.AddTestRun()
 tr.Processes.Default.Command='curl "http://127.0.0.1:{0}/default/cache/10/{1}" -H "x-debug: x-cache,x-cache-key,via,x-cache-generation" --verbose'.format(ts.Variables.port,objectid)
 tr.Processes.Default.ReturnCode=0
-tr.Processes.Default.StartBefore(Test.Processes.ts)
-tr.Processes.Default.Streams.All="gold/miss_default.gold"
+# time delay as proxy.config.http.wait_for_cache could be broken
+tr.Processes.Default.StartBefore(Test.Processes.ts,ready=2)
+tr.Processes.Default.Streams.All="gold/miss_default-1.gold"
 
 # Second touch is a HIT for default.
 tr=Test.AddTestRun()
 tr.Processes.Default.Command='curl "http://127.0.0.1:{0}/default/cache/10/{1}" -H "x-debug: x-cache,x-cache-key,via,x-cache-generation" --verbose'.format(ts.Variables.port,objectid)
 tr.Processes.Default.ReturnCode=0
-tr.Processes.Default.Streams.All="gold/hit_default.gold"
+tr.Processes.Default.Streams.All="gold/hit_default-1.gold"
 
 # Call traffic_ctrl to set new generation
 tr=Test.AddTestRun()

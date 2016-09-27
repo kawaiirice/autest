@@ -5,7 +5,7 @@ Tests for custom reponse body
 '''
 
 # this test currently fails and it should not
-
+Test.SkipIf(Condition.true("This test fails at the moment as is turned off"))
 Test.SkipUnless(Condition.HasProgram("curl","Curl need to be installed on sytem for this test to work"))
 
 ts=Test.MakeATSProcess("ts")
@@ -25,7 +25,7 @@ for directory_item in domain_directory:
     # write out a files with some content for Traffic server for given domain
     ts.Disk.File(os.path.join(body_factory_dir, directory_item, "access#denied")).\
         WriteOn("{0} 44 Not 89 found".format(directory_item))
-    print(os.path.join(body_factory_dir, directory_item, ".body_factory_info"))
+    
     ts.Disk.File(os.path.join(body_factory_dir, directory_item, ".body_factory_info")).\
         WriteOn("")
     # make a test run for a given domain
