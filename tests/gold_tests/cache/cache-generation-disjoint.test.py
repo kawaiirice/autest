@@ -15,6 +15,7 @@ ts.Disk.records_config.update({
             'proxy.config.http.cache.generation':-1, # Start with cache turned off
             'proxy.config.http.wait_for_cache': 1, 
             'proxy.config.config_update_interval_ms':1,
+            
         })
 ts.Disk.plugin_config.AddLine('xdebug.so')
 ts.Disk.remap_config.AddLines([

@@ -92,8 +92,8 @@ def MakeATSProcess(obj, name, command='traffic_server', select_ports=True):
     p.Variables.LOGDIR=log_dir
 
     # this is needed for cache
-    runtime_dir=os.path.join(ts_dir, 'var')
     p.Env['PROXY_CONFIG_LOCAL_STATE_DIR']=runtime_dir
+    p.Env['PROXY_CONFIG_HOSTDB_STORAGE_PATH']=runtime_dir
     p.Variables.RUNTIMEDIR=runtime_dir
     p.Setup.MakeDir(runtime_dir)
     # will need this for traffic_manager is it runs
