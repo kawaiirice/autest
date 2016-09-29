@@ -58,7 +58,9 @@ def MakeATSProcess(obj, name, command='traffic_server', select_ports=True):
     # set bin location
     
     p.Env['PROXY_CONFIG_BIN_PATH'] = bin_dir
-    p.Setup.Copy(p.Variables.BINDIR, os.path.join(ts_dir, bin_dir), True)
+    bin_path=os.path.join(ts_dir, bin_dir)
+    p.Env['PATH']=bin_path+os.pathsep+p.ComposeEnv()['PATH']
+    p.Setup.Copy(p.Variables.BINDIR, bin_path, True)
     
     #########################################################
     ## setup config directory
@@ -219,7 +221,7 @@ def MakeATSProcess(obj, name, command='traffic_server', select_ports=True):
         p.Env['PROXY_CONFIG_HTTP_SERVER_PORTS']= "{0} {1}:ipv6".format(p.Variables.port,p.Variables.portv6)  # your own listen port
     p.Env['PROXY_CONFIG_PROCESS_MANAGER_MGMT_PORT']= str(p.Variables.manager_port)  
     p.Env['PROXY_CONFIG_ADMIN_SYNTHETIC_PORT']= str(p.Variables.admin_port)
-    #p.Env['PROXY_CONFIG_ADMIN_AUTOCONF_PORT']= str(p.Variables.admin_port)  # support pre ATS 6.x
+    p.Env['PROXY_CONFIG_ADMIN_AUTOCONF_PORT']= str(p.Variables.admin_port)  # support pre ATS 6.x
 
     # since we always kill this
     p.ReturnCode=None

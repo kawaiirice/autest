@@ -46,20 +46,21 @@ tr.Processes.Default.Streams.All="gold/hit_default-1.gold"
 
 # Call traffic_ctrl to set new generation
 tr=Test.AddTestRun()
-tr.Processes.Default.Command='traffic_control config set proxy.config.http.cache.generation 77'
+tr.Processes.Default.Command='traffic_ctl --debug config set proxy.config.http.cache.generation 77'
+tr.Processes.Default.ForceUseShell=False
 tr.Processes.Default.ReturnCode=0
 tr.Processes.Default.Env=ts.Env # set the environment for traffic_control to run in
 
 # Call traffic_ctrl to load new data
 tr=Test.AddTestRun()
-tr.Processes.Default.Command='traffic_control reload'
+tr.Processes.Default.Command='traffic_ctl reload'
 tr.Processes.Default.ReturnCode=0
 tr.Processes.Default.Env=ts.Env # set the environment for traffic_control to run in
 
 # new generation should first be a miss.
 tr=Test.AddTestRun()
 # create a new traffic_ctrl call and the environment 
-tr.Processes.Process("ctrl","traffic_control reload").Env=ts.Env 
+tr.Processes.Process("ctrl","traffic_ctl reload").Env=ts.Env 
 tr.Processes.Default.Command='curl "http://127.0.0.1:{0}/default/cache/10/{1}" -H "x-debug: x-cache,x-cache-key,via,x-cache-generation" --verbose'.format(ts.Variables.port,objectid)
 tr.Processes.Default.ReturnCode=0
 tr.Processes.Default.Streams.All="gold/miss_default77.gold"
