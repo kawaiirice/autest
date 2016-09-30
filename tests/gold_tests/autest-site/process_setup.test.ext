@@ -39,7 +39,7 @@ def MakeATSProcess(obj, name, command='traffic_server', select_ports=True):
     plugin_dir = os.path.join(ts_dir,obj.Variables.PLUGINDIR.replace(obj.Variables.PREFIX+"/",""))
     # the log directory
     log_dir=os.path.join(ts_dir, 'log')
-    runtime_dir=os.path.join(ts_dir, 'var')
+    runtime_dir=os.path.join(ts_dir, 'var/trafficserver')
     
     # create process
     p = obj.Processes.Process(name, command)
@@ -93,10 +93,12 @@ def MakeATSProcess(obj, name, command='traffic_server', select_ports=True):
     p.Env['PROXY_CONFIG_LOG_LOGFILE_DIR'] = log_dir
     p.Variables.LOGDIR=log_dir
 
-    # this is needed for cache
-    p.Env['PROXY_CONFIG_LOCAL_STATE_DIR']=runtime_dir
-    p.Env['PROXY_CONFIG_HOSTDB_STORAGE_PATH']=runtime_dir
-    p.Variables.RUNTIMEDIR=runtime_dir
+    # this is needed for cache and communication sockets
+    # Below was to make shorter paths but the code in
+    # traffic_ctl is broken and ignores this.
+    #p.Env['PROXY_CONFIG_LOCAL_STATE_DIR']=runtime_dir
+    #p.Env['PROXY_CONFIG_HOSTDB_STORAGE_PATH']=runtime_dir
+    #p.Variables.RUNTIMEDIR=runtime_dir
     p.Setup.MakeDir(runtime_dir)
     # will need this for traffic_manager is it runs
     p.Setup.MakeDir(os.path.join(config_dir, 'snapshots'))
