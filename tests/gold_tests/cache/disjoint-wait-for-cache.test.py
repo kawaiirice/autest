@@ -15,7 +15,6 @@ ts=Test.MakeATSProcess("ts")
 ts.Disk.records_config.update({
             'proxy.config.body_factory.enable_customizations': 3,  # enable domain specific body factory
             'proxy.config.http.cache.generation':-1, # Start with cache turned off
-            'proxy.config.http.wait_for_cache': 1, 
             'proxy.config.config_update_interval_ms':1,
             'proxy.config.http.wait_for_cache':3,
         })
