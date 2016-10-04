@@ -397,7 +397,7 @@ def main():
     parser = argparse.ArgumentParser()
 
     parser.add_argument("--data-dir","-d",
-                        type=lambda x: self._path(True,x),
+                        type=lambda x: _path(True,x),
                         required=True,
                         help="Directory with data file"
                         )
