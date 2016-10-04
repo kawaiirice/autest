@@ -1,5 +1,4 @@
 import os
 
 Settings.path_argument(["--ats-bin"],
-                        default=os.path.abspath('/home/naphat/opt/ats/bin'),
                         help="A user provided directory to ATS bin")
