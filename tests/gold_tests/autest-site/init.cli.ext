@@ -1,4 +1,5 @@
 import os
 
 Settings.path_argument(["--ats-bin"],
+                        required=True,
                         help="A user provided directory to ATS bin")
