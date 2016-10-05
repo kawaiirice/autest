@@ -18,8 +18,8 @@ ts.Disk.records_config.update({
 ts.Disk.remap_config.AddLine(
     'map http://www.example.com http://127.0.0.1:{0}'.format(server.Variables.Port)
 )
-ts.Disk.remap.config.AddLine(
-    'map http://www.example.com:8080 http://127.0.0.1:{0}'.format(server.Variable.Port)
+ts.Disk.remap_config.AddLine(
+    'map http://www.example.com:8080 http://127.0.0.1:{0}'.format(server.Variables.Port)
 )
 
 "curl --proxy 127.0.0.1:{1} {0}"
@@ -33,31 +33,31 @@ tr.Processes.Default.Streams.All="gold/remap-404.gold"
 
 # www.example.com host
 tr=Test.AddTestRun()
-tr.Processes.Default.Command='curl --proxy 127.0.0.1:{1} "http://www.example.com" --verbose'.format(ts.Variables.port)
+tr.Processes.Default.Command='curl --proxy 127.0.0.1:{0} "http://www.example.com" --verbose'.format(ts.Variables.port)
 tr.Processes.Default.ReturnCode=0
 tr.Processes.Default.Streams.All="gold/remap-200.gold"
 
 # www.example.com:80 host
 tr=Test.AddTestRun()
-tr.Processes.Default.Command='curl  --proxy 127.0.0.1:{1} "http://www.example.com:80" --verbose'.format(ts.Variables.port)
+tr.Processes.Default.Command='curl  --proxy 127.0.0.1:{0} "http://www.example.com:80" --verbose'.format(ts.Variables.port)
 tr.Processes.Default.ReturnCode=0
 tr.Processes.Default.Streams.All="gold/remap-200.gold"
 
 # www.example.com:8080 host
 tr=Test.AddTestRun()
-tr.Processes.Default.Command='curl  --proxy 127.0.0.1:{1} "http://www.example.com:8080" --verbose'.format(ts.Variables.port)
+tr.Processes.Default.Command='curl  --proxy 127.0.0.1:{0} "http://www.example.com:8080" --verbose'.format(ts.Variables.port)
 tr.Processes.Default.ReturnCode=0
 tr.Processes.Default.Streams.All="gold/remap-200.gold"
 
 # no rule for this
 tr=Test.AddTestRun()
-tr.Processes.Default.Command='curl  --proxy 127.0.0.1:{1} "http://www.test.com" --verbose'.format(ts.Variables.port)
+tr.Processes.Default.Command='curl  --proxy 127.0.0.1:{0} "http://www.test.com" --verbose'.format(ts.Variables.port)
 tr.Processes.Default.ReturnCode=0
 tr.Processes.Default.Streams.All="gold/remap-404.gold"
 
 # bad port
 tr=Test.AddTestRun()
-tr.Processes.Default.Command='curl  --proxy 127.0.0.1:{1} "http://www.example.com:1234" --verbose'.format(ts.Variables.port)
+tr.Processes.Default.Command='curl  --proxy 127.0.0.1:{0} "http://www.example.com:1234" --verbose'.format(ts.Variables.port)
 tr.Processes.Default.ReturnCode=0
 tr.Processes.Default.Streams.All="gold/remap-404.gold"
 

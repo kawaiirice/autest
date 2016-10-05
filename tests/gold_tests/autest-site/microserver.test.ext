@@ -2,10 +2,10 @@
 from .ports import bind_unused_port
 
 def MakeOriginServer(obj, name,public_ip=False):
-    server_path= os.join(obj.Variables.AtsTestToolsDir,'microServer/uWsServer.py')
+    server_path= os.path.join(obj.Variables.AtsTestToolsDir,'microServer/uWsServer.py')
     data_dir = os.path.join(obj.RunDirectory, name)
     sock,port = bind_unused_port()
-    command = "python3 {0} --data-dir {1} --port {2} --public {3}".format(server_path, data_path, port, public_ip)
+    command = "python3 {0} --data-dir {1} --port {2} --public {3}".format(server_path, data_dir, port, public_ip)
 
     # create process
     p = obj.Processes.Process(name, command)
