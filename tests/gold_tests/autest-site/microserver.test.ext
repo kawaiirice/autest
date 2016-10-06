@@ -1,5 +1,5 @@
 
-from .ports import bind_unused_port
+from ports import bind_unused_port
 
 def MakeOriginServer(obj, name,public_ip=False):
     server_path= os.path.join(obj.Variables.AtsTestToolsDir,'microServer/uWsServer.py')
