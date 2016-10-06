@@ -12,6 +12,8 @@ if ENV['ATS_BIN'] is not None:
     traffic_layout = os.path.join(ENV['ATS_BIN'], "traffic_layout")
     out = subprocess.check_output([traffic_layout, "--json"])
     out = json.loads(out.decode("utf-8"))
+    for k,v in out.items():
+        out[k]=v[:-1] if v.endswith('/') else v
     Variables.update(out)
     host.WriteVerbose(['ats'],"Traffic server layout Data:\n",pprint.pformat(out))
 
