@@ -311,7 +311,7 @@ class MyHandler(BaseHTTPRequestHandler):
 
             self.end_headers()
 
-    def do_POST(self):        
+    def do_POST(self):
         #print("ATS sent me==================>",self.headers)
         response_string=None
         chunkedResponse= False
@@ -398,13 +398,13 @@ def _bool(arg):
         opt_true_values = set(['y', 'yes', 'true', 't', '1', 'on' , 'all'])
         opt_false_values = set(['n', 'no', 'false', 'f', '0', 'off', 'none'])
 
-        tmp = value.lower()
+        tmp = arg.lower()
         if tmp in opt_true_values:
             return True
         elif tmp in opt_false_values:
             return False
         else:
-            msg = 'Invalid value Boolean value : "{0}"\n Valid options are {0}'.format(value,
+            msg = 'Invalid value Boolean value : "{0}"\n Valid options are {0}'.format(arg,
                     opt_true_values | opt_false_values)
             raise argparse.ArgumentTypeError(msg)
 
