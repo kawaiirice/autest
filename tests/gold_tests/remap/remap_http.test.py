@@ -22,7 +22,6 @@ ts.Disk.remap_config.AddLine(
     'map http://www.example.com:8080 http://127.0.0.1:{0}'.format(server.Variables.Port)
 )
 
-"curl --proxy 127.0.0.1:{1} {0}"
 # call localhost straight
 tr=Test.AddTestRun()
 tr.Processes.Default.Command='curl "http://127.0.0.1:{0}/" --verbose'.format(ts.Variables.port)

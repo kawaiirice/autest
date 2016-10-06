@@ -1,1 +1,2 @@
 tests/gold_tests/_sandbox/
+*.pyc
