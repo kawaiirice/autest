@@ -291,12 +291,17 @@ class RecordsConfig(Config, dict):
         return (False,"Writing config file {0}".format(os.path.split(self.Name)[-1]),"Success")
 ############################################################################################################
 class JSON_IO(File):
+
+    #def __init__(self, runable, name, exists = None, size = None, content_tester = None, execute=False, runtime=True):
+    #    super(JSON_IO, self).__init__(
+    #        runable, name, exists = None, size = None, content_tester = None, execute=False, runtime=True
+    #    )
     #add method that user wants the origin server to call when request_header is being sent for the test named 'testName'
     def addMethod(testName, request_header, functionName):
         return 
 
     # creates the full request or response block using headers and message data
-    def httpObject(header,data):
+    def httpObject(self,header,data):
         r=dict()
         r["timestamp"]=""
         r["headers"]=header
@@ -304,18 +309,18 @@ class JSON_IO(File):
         return r
     
     # addResponse adds customized response with respect to request_header. request_header and response_header are both dictionaries
-    def addResponse(filename, testName, request_header, response_header):
+    def addResponse(self,filename, testName, request_header, response_header):
         txn = dict()
         txn["timestamp"] = ""
         txn["uuid"] = testName
         txn["request"] = request_header
         txn["response"] = response_header
-        self.addTransactionToSession(testName,txn,filename)
+        self.addTransactionToSession(txn,filename)
         return
 
     #adds transaction in json format to the specified file
-    def addTransactionToSession(txn,JFile):
-        with open(JFile,'w') as jf:
+    def addTransactionToSession(self,txn,JFile):
+        with open(JFile,'r') as jf:
             jsondata = json.load(jf)
             if jsondata == None:
                 jsondata = dict()
@@ -324,10 +329,10 @@ class JSON_IO(File):
             jf.write(json.dumps(jsondata))
 
     #make headers with the key and values provided        
-    def makeHeader(requestString, **kwargs):
+    def makeHeader(self,requestString, **kwargs):
         headerStr = requestString+'\r\n'
         for k,v in kwargs.iteritems():
-            headerStr+ = k+': '+v+'\r\n'
+            headerStr += k+': '+v+'\r\n'
         headerStr = headerStr+'\r\n'
         return headerStr
 

@@ -1,6 +1,10 @@
 
 from ports import bind_unused_port
 
+
+def foo(self,val):
+    print(self.Name,val)
+
 def MakeOriginServer(obj, name,public_ip=False):
     server_path= os.path.join(obj.Variables.AtsTestToolsDir,'microServer/uWServer.py')
     data_dir = os.path.join(obj.RunDirectory, name)
@@ -12,6 +16,8 @@ def MakeOriginServer(obj, name,public_ip=False):
     p.Setup.MakeDir(data_dir)
     p.Variables.Port = port
     p.Variables.DataDir = data_dir
+
+    AddMethodToInstance(p,foo,name="Bob")
 
     return p
 
