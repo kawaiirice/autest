@@ -320,17 +320,20 @@ class JSON_IO(File):
 
     #adds transaction in json format to the specified file
     def addTransactionToSession(self,txn,JFile):
-        emptyJSON_session = {"version": "0.1","txns": [{"request": {"headers": "GET x.x.x.x HTTP/1.1\r\nHost: x.x.x.x\r\nConnection: Keep-Alive\r\n\r\n", "timestamp": "1234567890.123", "body": ""},"response": {"headers": "HTTP/1.1 404 Not Found\r\n\r\n", "timestamp": "1234567890.123", "body": ""},"uuid": "-1"}],"timestamp": "1234567890.123","encoding": "url_encoded"}
-
+        jsondata=None
         if os.path.exists(JFile):
             jf = open(JFile,'r')
             jsondata = json.load(jf)
-        else:
-            jsondata=emptyJSON_session
         
         if jsondata == None:
             jsondata = dict()
-        jsondata["txns"].append(txn)
+            jsondata["version"]='0.1'
+            jsondata["timestamp"]="1234567890.098"
+            jsondata["encoding"]="url_encoded"
+            jsondata["txns"]=list()
+            jsondata["txns"].append(txn)
+        else:
+            jsondata["txns"].append(txn)
         with open(JFile,'w') as jf:
             jf.write(json.dumps(jsondata))
 
