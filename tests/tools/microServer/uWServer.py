@@ -1,3 +1,5 @@
+#!/bin/env python3
+
 import string
 import http.client
 import cgi
@@ -56,7 +58,11 @@ class MyHandler(BaseHTTPRequestHandler):
         #print(keys)
         if keys:
             rkey=keys[1]
-        key=rkey.split("/")[-1]
+        key=rkey.split("/",1)[1]
+        if key+"/" in G_replay_dict:
+            key = key+"/"
+        elif len(key) > 1 and key[:-1] in G_replay_dict:
+            key = key[:-1]
         return key
 
     def parseRequestline(self,requestline):

@@ -14,9 +14,30 @@ def httpObject(self,header,data):
 
 # addResponse adds customized response with respect to request_header. request_header and response_header are both dictionaries
 def addResponse(self,filename, testName, request_header, response_header):
+
     txn = dict()
     txn["timestamp"] = ""
     txn["uuid"] = testName
+    txn["request"] = request_header
+    txn["response"] = response_header
+    print("data dir",self.Variables.DataDir)
+    addTransactionToSession(txn,filename)
+    absFilepath=os.path.abspath(filename)
+    self.Setup.CopyAs(absFilepath,self.Variables.DataDir)
+    return
+
+# addResponse adds customized response with respect to request_header. request_header and response_header are both dictionaries
+def addResponse(self,filename, request_header, response_header):
+    requestline = request_header["headers"].split("\r\n")[0]
+    requestline = requestline.split(" ")[1]
+    resourceLocation = requestline.split("/",1)
+    if len(resourceLocation)>1:
+        rl = resourceLocation[1]
+    else:
+        rl = ""
+    txn = dict()
+    txn["timestamp"] = ""
+    txn["uuid"] = rl
     txn["request"] = request_header
     txn["response"] = response_header
     print("data dir",self.Variables.DataDir)
