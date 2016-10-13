@@ -26,8 +26,8 @@ def MakeATSProcess(obj, name, command='traffic_server', select_ports=True):
     plugin_dir = os.path.join(ts_dir,obj.Variables.PLUGINDIR.replace(obj.Variables.PREFIX+"/",""))
     # the log directory
     log_dir=os.path.join(ts_dir, 'log')
-    runtime_dir=os.path.join(ts_dir, 'var/trafficserver')
-    
+    runtime_dir= obj.Variables.RUNTIMEDIR.replace(obj.Variables.PREFIX+"/","")
+        
     # create process
     p = obj.Processes.Process(name, command)
     
