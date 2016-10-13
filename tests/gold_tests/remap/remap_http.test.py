@@ -37,37 +37,37 @@ tr.Processes.Default.ReturnCode=0
 # time delay as proxy.config.http.wait_for_cache could be broken
 tr.Processes.Default.StartBefore(server)
 tr.Processes.Default.StartBefore(Test.Processes.ts)
-tr.Processes.Default.Streams.All="gold/remap-404.gold"
+tr.Processes.Default.Streams.stderr="gold/remap-hitATS-404.gold"
 tr.StillRunningAfter=server
 
 # www.example.com host
 tr=Test.AddTestRun()
 tr.Processes.Default.Command='curl --proxy 127.0.0.1:{0} "http://www.example.com" --verbose'.format(ts.Variables.port)
 tr.Processes.Default.ReturnCode=0
-tr.Processes.Default.Streams.All="gold/remap-200.gold"
+tr.Processes.Default.Streams.stderr="gold/remap-200.gold"
 
 # www.example.com:80 host
 tr=Test.AddTestRun()
 tr.Processes.Default.Command='curl  --proxy 127.0.0.1:{0} "http://www.example.com:80/" --verbose'.format(ts.Variables.port)
 tr.Processes.Default.ReturnCode=0
-tr.Processes.Default.Streams.All="gold/remap-200.gold"
+tr.Processes.Default.Streams.stderr="gold/remap-200.gold"
 
 # www.example.com:8080 host
 tr=Test.AddTestRun()
 tr.Processes.Default.Command='curl  --proxy 127.0.0.1:{0} "http://www.example.com:8080" --verbose'.format(ts.Variables.port)
 tr.Processes.Default.ReturnCode=0
-tr.Processes.Default.Streams.All="gold/remap-200.gold"
+tr.Processes.Default.Streams.stderr="gold/remap-200.gold"
 
 # no rule for this
 tr=Test.AddTestRun()
 tr.Processes.Default.Command='curl  --proxy 127.0.0.1:{0} "http://www.test.com/" --verbose'.format(ts.Variables.port)
 tr.Processes.Default.ReturnCode=0
-tr.Processes.Default.Streams.All="gold/remap-404.gold"
+tr.Processes.Default.Streams.stderr="gold/remap-404.gold"
 
 # bad port
 tr=Test.AddTestRun()
 tr.Processes.Default.Command='curl  --proxy 127.0.0.1:{0} "http://www.example.com:1234/" --verbose'.format(ts.Variables.port)
 tr.Processes.Default.ReturnCode=0
-tr.Processes.Default.Streams.All="gold/remap-404.gold"
+tr.Processes.Default.Streams.stderr="gold/remap-404.gold"
 
      

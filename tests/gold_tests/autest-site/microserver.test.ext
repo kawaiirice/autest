@@ -1,5 +1,6 @@
 
 from ports import bind_unused_port
+import json
 
 def addMethod(self,testName, request_header, functionName):
     return 
@@ -26,6 +27,8 @@ def addResponse(self,filename, testName, request_header, response_header):
     self.Setup.CopyAs(absFilepath,self.Variables.DataDir)
     return
 
+
+
 # addResponse adds customized response with respect to request_header. request_header and response_header are both dictionaries
 def addResponse(self,filename, request_header, response_header):
     requestline = request_header["headers"].split("\r\n")[0]
@@ -40,7 +43,6 @@ def addResponse(self,filename, request_header, response_header):
     txn["uuid"] = rl
     txn["request"] = request_header
     txn["response"] = response_header
-    print("data dir",self.Variables.DataDir)
     addTransactionToSession(txn,filename)
     absFilepath=os.path.abspath(filename)
     self.Setup.CopyAs(absFilepath,self.Variables.DataDir)
@@ -88,7 +90,7 @@ def MakeOriginServer(obj, name,public_ip=False):
     p.Variables.DataDir = data_dir
     AddMethodToInstance(p,addResponse)
     AddMethodToInstance(p,addTransactionToSession)
-
+    
     return p
 
 AddTestRunSet(MakeOriginServer,name="MakeOriginServer")
