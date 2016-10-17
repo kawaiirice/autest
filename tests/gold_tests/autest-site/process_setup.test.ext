@@ -17,13 +17,18 @@ def MakeATSProcess(obj, name, command='traffic_server', select_ports=True):
     #common bin directory
     bin_dir = 'bin'
     # ideally we would use a value like config.. but there is a bug
-    # in which records.conf values are not loaded correctly from this location, 
+    # in which records.conf values are not loaded correctly from this location,
     # so we use the expecetd "build" layout to correct the issue for the time being
-    config_dir = os.path.join(ts_dir,obj.Variables.SYSCONFDIR.replace(obj.Variables.PREFIX+"/",""))
+    config_dir = os.path.join(ts_dir,
+                              obj.Variables.SYSCONFDIR.replace(
+                                  obj.Variables.PREFIX+"/",
+                                  ""
+                                  )
+                             )
     # directory contains the html response templates
-    template_dir=os.path.join(config_dir, "body_factory")
+    template_dir = os.path.join(config_dir, "body_factory")
     # contains plugins
-    plugin_dir = os.path.join(ts_dir,obj.Variables.PLUGINDIR.replace(obj.Variables.PREFIX+"/",""))
+    plugin_dir = os.path.join(ts_dir, obj.Variables.PLUGINDIR.replace(obj.Variables.PREFIX+"/",""))
     # the log directory
     log_dir=os.path.join(ts_dir, 'log')
     runtime_dir=os.path.join(ts_dir, 'var/trafficserver')
@@ -90,7 +95,7 @@ def MakeATSProcess(obj, name, command='traffic_server', select_ports=True):
     p.Setup.MakeDir(runtime_dir)
     # will need this for traffic_manager is it runs
     p.Setup.MakeDir(os.path.join(config_dir, 'snapshots'))
-        
+
     ##########################################################
     # create subdirectories that need to exist (but are empty)
     p.Setup.MakeDir(ssl_dir) # ssl directory has to be created for keeping certs and keys
@@ -102,23 +107,22 @@ def MakeATSProcess(obj, name, command='traffic_server', select_ports=True):
     AddMethodToInstance(p,addSSLfile)
     ######################################################### 
     # define the basic file for a given test run 
-        
     #traffic.out ?? # cannot find it at the moment...
-    #squid.log 
-    fname="squid.log"
-    tmpname=os.path.join(log_dir,fname)
-    p.Disk.File(tmpname,id=make_id(fname))
-    #error.log 
-    fname="error.log"
-    tmpname=os.path.join(log_dir,fname)
-    p.Disk.File(tmpname,id=make_id(fname),exists=False)
-    #diags.log 
-    fname="diags.log"
-    tmpname=os.path.join(log_dir,fname)
-    p.Disk.File(tmpname,id=make_id(fname))
+    #squid.log
+    fname = "squid.log"
+    tmpname = os.path.join(log_dir, fname)
+    p.Disk.File(tmpname, id=make_id(fname))
+    #error.log
+    fname = "error.log"
+    tmpname = os.path.join(log_dir, fname)
+    p.Disk.File(tmpname, id=make_id(fname), exists=False)
+    #diags.log
+    fname = "diags.log"
+    tmpname = os.path.join(log_dir, fname)
+    p.Disk.File(tmpname, id=make_id(fname))
     # add this test back once we have network namespaces working again
-    p.Disk.diags_log.Content=Testers.ExcludesExpression("ERROR:","diags.log should not contain errors")
-    
+    p.Disk.diags_log.Content = Testers.ExcludesExpression("ERROR:", "diags.log should not contain errors")
+
     # config files
     fname="records.config"
     tmpname=os.path.join(config_dir,fname)

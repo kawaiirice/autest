@@ -1,7 +1,7 @@
 import os
 
 Test.Summary = '''
-Test custom log file
+Test custom log file format
 '''
 # need Curl
 Test.SkipUnless(
