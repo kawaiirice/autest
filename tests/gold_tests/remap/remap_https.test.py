@@ -22,7 +22,7 @@ server.addResponse("sessionlog.json", request_header, response_header)
 ts.addSSLfile("/home/persia/server.pem")
 ts.addSSLfile("/home/persia/server.key")
 
-ts.Variables.ssl_port = 8443
+ts.Variables.ssl_port = 4443
 ts.Disk.records_config.update({
         'proxy.config.diags.debug.enabled': 1,
         'proxy.config.diags.debug.tags': 'lm|ssl',
@@ -83,12 +83,12 @@ tr.Processes.Default.Streams.stderr="gold/remap-https-200.gold"
 tr=Test.AddTestRun()
 tr.Processes.Default.Command='curl -k https://127.0.0.1:{0} -H "Host: www.test.com" --verbose'.format(ts.Variables.ssl_port)
 tr.Processes.Default.ReturnCode=0
-tr.Processes.Default.Streams.stderr="gold/remap-404.gold"
+tr.Processes.Default.Streams.stderr="gold/remap-hitATS-404.gold"
 
 # bad port
 tr=Test.AddTestRun()
 tr.Processes.Default.Command='curl -k https://127.0.0.1:{0} -H "Host: www.example.com:1234" --verbose'.format(ts.Variables.ssl_port)
 tr.Processes.Default.ReturnCode=0
-tr.Processes.Default.Streams.stderr="gold/remap-404.gold"
+tr.Processes.Default.Streams.stderr="gold/remap-hitATS-404.gold"
 
     
