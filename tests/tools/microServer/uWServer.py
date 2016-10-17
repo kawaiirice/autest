@@ -254,13 +254,13 @@ class MyHandler(BaseHTTPRequestHandler):
         return True
 
     def do_GET(self):
-        global G_replay_dict
+        global G_replay_dict, test_mode_enabled
         #print("ATS sent me==================>",self.headers)
         if test_mode_enabled:
             request_hash = self.getTestName(self.requestline)
         else:
             request_hash, __ = cgi.parse_header(self.headers.get('Content-MD5'))
-        print("key:",request_hash)
+        #print("key:",request_hash)
         response_string=None
         chunkedResponse= False
         if request_hash not in G_replay_dict:
@@ -311,7 +311,7 @@ class MyHandler(BaseHTTPRequestHandler):
 
         return
     def do_HEAD(self):
-        global G_replay_dict
+        global G_replay_dict, test_mode_enabled
         #print("ATS sent me==================>",self.headers)
         if test_mode_enabled:
             request_hash = self.getTestName(self.requestline)
@@ -351,7 +351,7 @@ class MyHandler(BaseHTTPRequestHandler):
         #print("ATS sent me==================>",self.headers)
         response_string=None
         chunkedResponse= False
-        global G_replay_dict
+        global G_replay_dict, test_mode_enabled
         #print("ATS sent me==================>",self.headers)
         if test_mode_enabled:
             request_hash = self.getTestName(self.requestline)
@@ -454,7 +454,7 @@ def _bool(arg):
 
 
 def main():
-
+    global test_mode_enabled
     parser = argparse.ArgumentParser()
 
     parser.add_argument("--data-dir","-d",
@@ -498,6 +498,7 @@ def main():
         server_port = args.port
         socket_timeout = args.timeout
         test_mode_enabled = args.mode=="test"
+        
         MyHandler.protocol_version = HTTP_VERSION
         server = ThreadingServer(('', server_port), MyHandler)
         server.timeout = socket_timeout or 5
