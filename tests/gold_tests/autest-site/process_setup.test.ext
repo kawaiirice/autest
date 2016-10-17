@@ -93,7 +93,6 @@ def MakeATSProcess(obj, name, command='traffic_server', select_ports=True):
         
     ##########################################################
     # create subdirectories that need to exist (but are empty)
-    # log directory has to be created with correct permissions
     p.Setup.MakeDir(ssl_dir) # ssl directory has to be created for keeping certs and keys
     p.Setup.Chown(ssl_dir, "nobody", "nobody",ignore=True) 
 
