@@ -30,8 +30,9 @@ def MakeATSProcess(obj, name, command='traffic_server', select_ports=True):
     # contains plugins
     plugin_dir = os.path.join(ts_dir, obj.Variables.PLUGINDIR.replace(obj.Variables.PREFIX+"/",""))
     # the log directory
-    log_dir = os.path.join(ts_dir, 'log')
-    runtime_dir = os.path.join(ts_dir, obj.Variables.RUNTIMEDIR.replace(obj.Variables.PREFIX+"/",""))
+    log_dir=os.path.join(ts_dir, 'log')
+    runtime_dir=os.path.join(ts_dir, 'var/trafficserver')
+    ssl_dir=os.path.join(ts_dir, 'ssl')
     
     # create process
     p = obj.Processes.Process(name, command)
@@ -96,8 +97,16 @@ def MakeATSProcess(obj, name, command='traffic_server', select_ports=True):
     p.Setup.MakeDir(os.path.join(config_dir, 'snapshots'))
 
     ##########################################################
-    # define the basic file for a given test run
+    # create subdirectories that need to exist (but are empty)
+    p.Setup.MakeDir(ssl_dir) # ssl directory has to be created for keeping certs and keys
+    p.Setup.Chown(ssl_dir, "nobody", "nobody",ignore=True) 
 
+    # set env so traffic server uses correct locations
+    p.Env['PROXY_CONFIG_SSL_DIR'] = ssl_dir
+    p.Variables.SSLDir=ssl_dir
+    AddMethodToInstance(p,addSSLfile)
+    ######################################################### 
+    # define the basic file for a given test run 
     #traffic.out ?? # cannot find it at the moment...
     #squid.log
     fname = "squid.log"
@@ -197,6 +206,9 @@ def MakeATSProcess(obj, name, command='traffic_server', select_ports=True):
         s1,p.Variables.port       = bind_unused_port()
         s1v6,p.Variables.portv6       = bind_unused_port()
         p.Ready=When.PortOpen(p.Variables.port)
+    else:
+        p.Variables.port          = 8080
+        p.Variables.portv6        = 8080
     s2,p.Variables.manager_port   = bind_unused_port()
     s3,p.Variables.admin_port     = bind_unused_port()
     
@@ -293,6 +305,9 @@ class RecordsConfig(Config, dict):
                                                        kind=self.reverse_kind_map[type(val)],
                                                        val=val)) 
         return (False,"Writing config file {0}".format(os.path.split(self.Name)[-1]),"Success")
+############################################################################################################
+def addSSLfile(self,filename):
+    self.Setup.CopyAs(filename, self.Variables.SSLDir)
 
 RegisterFileType(Config,"ats:config")
 RegisterFileType(RecordsConfig,"ats:config:records")
