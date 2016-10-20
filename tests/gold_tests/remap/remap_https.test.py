@@ -19,8 +19,8 @@ response_header={"headers": "HTTP/1.1 200 OK\r\nConnection: close\r\n\r\n", "tim
 server.addResponse("sessionlog.json", request_header, response_header)
 
 #add ssl materials like key, certificates for the server
-ts.addSSLfile("/home/persia/server.pem")
-ts.addSSLfile("/home/persia/server.key")
+ts.addSSLfile("ssl/server.pem")
+ts.addSSLfile("ssl/server.key")
 
 ts.Variables.ssl_port = 4443
 ts.Disk.records_config.update({
