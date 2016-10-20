@@ -1,3 +1,4 @@
 tests/gold_tests/_sandbox/
 *.pyc
 .vscode/ftp-sync.json
+tests/env-test/

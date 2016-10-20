@@ -10,7 +10,14 @@ if Arguments.ats_bin is not None:
 if ENV['ATS_BIN'] is not None:
     # Add variables for Tests
     traffic_layout = os.path.join(ENV['ATS_BIN'], "traffic_layout")
-    out = subprocess.check_output([traffic_layout, "--json"])
+    if not os.path.isdir(ENV['ATS_BIN']):
+        host.WriteError("--ats-bin requires a directory", show_stack=False)
+    if not os.path.isfile(traffic_layout):
+        host.WriteError("traffic_layout is not found. Aborting tests - Bad build or install.", show_stack=False)
+    try:
+        out = subprocess.check_output([traffic_layout, "--json"])
+    except subprocess.CalledProcessError:
+        host.WriteError("traffic_layout is broken. Aborting tests - The build of traffic server is bad.", show_stack=False) 
     out = json.loads(out.decode("utf-8"))
     for k,v in out.items():
         out[k]=v[:-1] if v.endswith('/') else v
