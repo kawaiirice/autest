@@ -1,12 +1,12 @@
-{}
-> GET {} HTTP/1.1
-> Host: {}
-> User-Agent: curl/{}
-{}
+``
+> GET `` HTTP/1.1
+> Host: ``
+> User-Agent: curl/``
+``
 < HTTP/1.1 404 Not Found
-< Date: {}
+< Date: ``
 < Proxy-Connection: keep-alive
-< Server: ATS/{}
-{}
+< Server: ATS/``
+``
 < Content-Type: text/html
-{}
+``
