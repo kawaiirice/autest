@@ -1,0 +1,1 @@
+{"timestamp": "1234567890.098", "version": "0.1", "txns": [{"timestamp": "", "request": {"body": "", "headers": "GET / HTTP/1.1\r\nHost: www.example.com\r\n\r\n", "timestamp": "1469733493.993"}, "uuid": "", "response": {"body": "", "headers": "HTTP/1.1 200 OK\r\nConnection: close\r\n\r\n", "timestamp": "1469733493.993"}}], "encoding": "url_encoded"}
