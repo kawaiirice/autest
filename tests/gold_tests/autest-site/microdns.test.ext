@@ -1,0 +1,45 @@
+
+from ports import bind_unused_port
+import json
+
+#adds mappings in json format to the specified file
+def updateZonefile(mappings, zonefile):
+    jsondata=None
+    #create file in rundirectory if it doesn't exist
+    # if not os.path.exists(os.path.dirname(zonefile)):
+    #     os.makedirs(os.path.dirname(zonefile))
+    absFilepath = os.path.join(self.Variables.DataDir, zonefile)
+    if os.path.exists(absFilepath):
+        jf = open(absFilepath,'r')
+        jsondata = json.load(jf)
+
+    if jsondata == None:
+        jsondata = dict()
+        jsondata["mappings"]=list()
+        jsondata["mappings"].append(txn)
+    else:
+        jsondata["mappings"].append(txn)
+    with open(absFilepath,'w+') as jf:
+        jf.write(json.dumps(jsondata))
+
+def MakeDNSServer(obj, name, zonefile):
+    server_path= os.path.join(obj.Variables.AtsTestToolsDir,'microDNS/uDNS.py')
+    zonefile_path= os.path.join(obj.Variables.AtsTestToolsDir,'microDNS/zonefile.json') #TODO: put in the run directory
+    data_dir = os.path.join(obj.RunDirectory, name)
+    #TODO: check if zonefile is a path and copy its contents to run dir. otherwise, create a zonefile of that name in run directory and get updates
+
+    sock,port = bind_unused_port()
+    command = "python3 {0} {1} {2} --rr".format(server_path, port, zonefile_path)
+
+    # create process
+    p = obj.Processes.Process(name, command)
+    p.Setup.MakeDir(data_dir)
+    p.Variables.Port = port
+    p.Variables.DataDir = data_dir
+    AddMethodToInstance(p,addResponse)
+    AddMethodToInstance(p,addTransactionToSession)
+
+    return p
+
+AddTestRunSet(MakeDNSServer,name="MakeDNSServer")
+AddTestRunSet(MakeDNSServer,name="MakeDNS")

@@ -34,7 +34,7 @@ ts.Disk.ip_allow_config.WriteOn('')
 tr=Test.AddTestRun()
 tr.Processes.Default.Command='curl -sS --proxy 127.0.0.1:{0} "http://www.example.com" --verbose'.format(ts.Variables.port)
 tr.Processes.Default.ReturnCode=52
-tr.Processes.Default.Streams.stderr="deny.gold"
+tr.Processes.Default.Streams.stderr="gold/deny.gold"
 tr.Processes.Default.StartBefore(Test.Processes.ts)
 
 '''
